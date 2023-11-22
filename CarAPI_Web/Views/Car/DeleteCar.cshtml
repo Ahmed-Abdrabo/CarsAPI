@@ -1,0 +1,117 @@
+﻿@model CarAPI_Web.Models.Dto.CarDTO
+
+<form asp-action="DeleteCar">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Delete Car</h1>
+        <hr />
+
+        <input hidden asp-for="Id" />
+        <div class="row">
+
+            <div class="col-2">
+                <label asp-for="Make" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Make" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Model" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Model" disabled class="form-control" />
+            </div>
+
+
+            <div class="col-2">
+                <label asp-for="Year" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Year" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="VIN" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="VIN" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="EngineType" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="EngineType" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="TransmissionType" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="TransmissionType" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Color" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Color" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Mileage" disabled class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Mileage" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Price" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Price" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="FuelEfficiency" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="FuelEfficiency" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="BodyType" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="BodyType" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Condition" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Condition" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="ImageUrl" disabled class="form-control" />
+            </div>
+
+            <div class="col-5 offset-2">
+                <a asp-action="IndexCar" asp-controller="Car" class="btn-primary btn form-control ">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Delete" class="btn btn-danger form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

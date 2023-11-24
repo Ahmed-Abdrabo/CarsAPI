@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CarAPI_Web.Models.Dto.CarDetailsDTO>
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col">
+			<h1 class="text-primary">Car Details List</h1>
+		</div>
+		<div class="col text-end pt-1">
+			<a asp-controller="CarDetails" asp-action="CreateCarDetails" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i> Add New Car Details</a>
+		</div>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Car Name
+				</th>
+				<th>
+					Car NO
+				</th>
+			  <th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Car.Make</td>
+					<td>@item.CarDetailsId</td>
+					
+					<td>
+						<a asp-controller="CarDetails" asp-action="UpdateCarDetails" asp-route-CarDetailsId="@item.CarDetailsId" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+						<a asp-controller="CarDetails" asp-action="DeleteCarDetails" asp-route-CarDetailsId="@item.CarDetailsId" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+</div>

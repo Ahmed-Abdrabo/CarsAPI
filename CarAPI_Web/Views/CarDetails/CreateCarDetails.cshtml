@@ -1,0 +1,56 @@
+﻿@model CarAPI_Web.Models.VM.CarDetailsCreateVM
+
+<form asp-action="CreateCarDetails">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Create Car Details</h1>
+        <hr />
+
+        <div class="row">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="col-2">
+                <label asp-for="CarDetails.CarDetailsId" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CarDetails.CarDetailsId" class="form-control" />
+                <span asp-validation-for="CarDetails.CarDetailsId" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="CarDetails.CarId" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="CarDetails.CarId" class="form-select" asp-items="@Model.CarList">
+                    <option disabled selected>--Select Car--</option>
+                </select>
+                <span asp-validation-for="CarDetails.CarId" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="CarDetails.SpecialDetails" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <textarea asp-for="CarDetails.SpecialDetails" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="CarDetails.SpecialDetails" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="CarDetails.AdditionalFeature" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <textarea asp-for="CarDetails.AdditionalFeature" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="CarDetails.AdditionalFeature" class="text-danger"></span>
+            </div>
+            <div class="col-5 offset-2">
+                <a asp-action="IndexCarDetails" asp-controller="CarDetails" class="btn-primary btn form-control ">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

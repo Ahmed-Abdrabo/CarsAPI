@@ -45,17 +45,19 @@ namespace CarAPI_Web.Controllers
 				var response = await _carService.CreateAsync<APIResponse>(CarDto);
 				if (response != null && response.IsSuccess)
 				{
-					return RedirectToAction(nameof(IndexCar));
+                    TempData["success"] = "Car created successfully";
+                    return RedirectToAction(nameof(IndexCar));
 				}
 			}
-			return View(CarDto);
+            TempData["error"] = "Error encountered.";
+            return View(CarDto);
 		}
 
         public async Task<IActionResult> UpdateCar(int carId)
         {
             var response = await _carService.GetAsync<APIResponse>(carId);
             if (response != null && response.IsSuccess)
-            {
+            {   
                 CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
                 return View(_mapper.Map<CarUpdateDTO>(carDto));
             }
@@ -68,13 +70,14 @@ namespace CarAPI_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                TempData["success"] = "Car updated successfully";
                 var response = await _carService.UpdateAsync<APIResponse>(carDto);
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexCar));
                 }
             }
+            TempData["error"] = "Error encountered.";
             return View(carDto);
         }
 
@@ -97,10 +100,11 @@ namespace CarAPI_Web.Controllers
 			var response = await _carService.DeleteAsync<APIResponse>(carDto.Id);
 			if (response != null && response.IsSuccess)
 			{
-				return RedirectToAction(nameof(IndexCar));
+                TempData["success"] = "Car deleted successfully";
+                return RedirectToAction(nameof(IndexCar));
 			}
-
-			return View(carDto);
+            TempData["error"] = "Error encountered.";
+            return View(carDto);
 		}
 	}
 }

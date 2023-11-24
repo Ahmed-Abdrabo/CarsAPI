@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddHttpClient<ICarService,CarService>();
 builder.Services.AddScoped<ICarService,CarService>();
-
+builder.Services.AddHttpClient<ICarDetailsService, CarDetailsService>();
+builder.Services.AddScoped<ICarDetailsService, CarDetailsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

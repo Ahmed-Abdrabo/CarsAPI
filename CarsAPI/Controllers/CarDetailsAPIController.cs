@@ -32,7 +32,7 @@ namespace CarsAPI.Controllers
         {
             try
             {
-                IEnumerable<CarDetails> carDetails = await _dbCarDetails.GetAllAsync();
+                IEnumerable<CarDetails> carDetails = await _dbCarDetails.GetAllAsync(includeProperties: "Car");
                 _response.Result = _mapper.Map<List<CarDetailsDTO>>(carDetails);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -82,12 +82,12 @@ namespace CarsAPI.Controllers
             {
                 if (await _dbCarDetails.GetAsync(u => u.CarDetailsId == createDTO.CarDetailsId) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Car Details already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Car Details already Exists!");
                     return BadRequest(ModelState);
                 }
                 if (await _dbCar.GetAsync(u => u.Id == createDTO.CarId) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Car ID is Invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Car ID is Invalid!");
                     return BadRequest(ModelState);
                 }
                 if (createDTO == null)
@@ -122,7 +122,7 @@ namespace CarsAPI.Controllers
                 }
                 if (await _dbCar.GetAsync(u => u.Id == updateDTO.CarId) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Car ID is Invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Car ID is Invalid!");
                     return BadRequest(ModelState);
                 }
                 var model = _mapper.Map<CarDetails>(updateDTO);

@@ -1,32 +1,35 @@
-﻿using CarAPI_Web.Models;
+﻿using AutoMapper;
+using CarAPI_Web.Models;
+using CarAPI_Web.Models.Dto;
+using CarAPI_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace CarAPI_Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+		private readonly ICarService _carService;
+		private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+		public HomeController(ICarService carService, IMapper mapper)
+		{
+			_carService = carService;
+			_mapper = mapper;
+		}
+		public async Task<IActionResult> Index()
+		{
+			List<CarDTO> list = new();
+			var response = await _carService.GetAllAsync<APIResponse>();
+			if (response != null && response.IsSuccess)
+			{
+				list = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result));
+			}
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+			return View(list);
+		}
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+		
     }
 }

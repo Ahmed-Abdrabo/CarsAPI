@@ -17,6 +17,8 @@ namespace CarsAPI
             CreateMap<CarDetails, CarDetailsDTO>().ReverseMap();
             CreateMap<CarDetails, CarDetailsCreateDTO>().ReverseMap();
             CreateMap<CarDetails, CarDetailsUpdateDTO>().ReverseMap();
+
+            CreateMap<ApplicationUser, UserDTO>().ReverseMap();
         }
     }
 }

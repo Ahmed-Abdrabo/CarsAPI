@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Car_Utility;
 using CarAPI_Web.Models;
 using CarAPI_Web.Models.Dto;
 using CarAPI_Web.Services.IServices;
@@ -21,7 +22,7 @@ namespace CarAPI_Web.Controllers
 		public async Task<IActionResult> Index()
 		{
 			List<CarDTO> list = new();
-			var response = await _carService.GetAllAsync<APIResponse>();
+			var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.IsSuccess)
 			{
 				list = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result));

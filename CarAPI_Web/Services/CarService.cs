@@ -16,50 +16,55 @@ namespace CarAPI_Web.Services
             carUrl = configuration.GetValue<string>("ServiceUrls:CarAPI");
 
         }
-        public Task<T> CreateAsync<T>(CarCreateDTO dto)
+        public Task<T> CreateAsync<T>(CarCreateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = carUrl + "/api/CarAPI"
+                Url = carUrl + "/api/v1/CarAPI",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = carUrl + "/api/CarAPI/" + id
+                Url = carUrl + "/api/v1/CarAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/CarAPI"
+                Url = carUrl + "/api/v1/CarAPI",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/CarAPI/" + id
+                Url = carUrl + "/api/v1/CarAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(CarUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(CarUpdateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto, 
-                Url = carUrl + "/api/CarAPI/" + dto.Id
+                Url = carUrl + "/api/v1/CarAPI/" + dto.Id,
+                Token = token
             });
         }
     }

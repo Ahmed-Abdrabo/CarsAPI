@@ -1,18 +1,22 @@
 ﻿using CarsAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarsAPI.Data
 {
-    public class ApplicationDbContext : DbContext 
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarDetails> CarDetails { get; set; }
+        public DbSet<LocalUser> LocalUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Car>(entity =>
             {
                 entity.Property(e => e.Price)

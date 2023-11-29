@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Car_Utility;
 using CarAPI_Web.Models;
 using CarAPI_Web.Models.Dto;
 using CarAPI_Web.Services;
 using CarAPI_Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -21,7 +23,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> IndexCar()
         {
             List<CarDTO> list = new();
-            var response = await _carService.GetAllAsync<APIResponse>();
+            var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {
                 list=JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result));
@@ -30,19 +32,21 @@ namespace CarAPI_Web.Controllers
             return View(list);
         }
 
-		public async Task<IActionResult> CreateCar()
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateCar()
 		{
 			return View();
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateCar(CarCreateDTO CarDto)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateCar(CarCreateDTO CarDto)
 		{
 			if (ModelState.IsValid)
 			{
 
-				var response = await _carService.CreateAsync<APIResponse>(CarDto);
+				var response = await _carService.CreateAsync<APIResponse>(CarDto, HttpContext.Session.GetString(SD.SessionToken));
 				if (response != null && response.IsSuccess)
 				{
                     TempData["success"] = "Car created successfully";
@@ -53,9 +57,10 @@ namespace CarAPI_Web.Controllers
             return View(CarDto);
 		}
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCar(int carId)
         {
-            var response = await _carService.GetAsync<APIResponse>(carId);
+            var response = await _carService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.SessionToken));
             if (response != null && response.IsSuccess)
             {   
                 CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
@@ -66,12 +71,13 @@ namespace CarAPI_Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCar(CarUpdateDTO carDto)
         {
             if (ModelState.IsValid)
             {
                 TempData["success"] = "Car updated successfully";
-                var response = await _carService.UpdateAsync<APIResponse>(carDto);
+                var response = await _carService.UpdateAsync<APIResponse>(carDto, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexCar));
@@ -81,9 +87,10 @@ namespace CarAPI_Web.Controllers
             return View(carDto);
         }
 
-		public async Task<IActionResult> DeleteCar(int carId)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteCar(int carId)
 		{
-			var response = await _carService.GetAsync<APIResponse>(carId);
+			var response = await _carService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.IsSuccess)
 			{
 				CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
@@ -94,10 +101,11 @@ namespace CarAPI_Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteCar(CarDTO carDto)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteCar(CarDTO carDto)
 		{
 
-			var response = await _carService.DeleteAsync<APIResponse>(carDto.Id);
+			var response = await _carService.DeleteAsync<APIResponse>(carDto.Id, HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.IsSuccess)
 			{
                 TempData["success"] = "Car deleted successfully";

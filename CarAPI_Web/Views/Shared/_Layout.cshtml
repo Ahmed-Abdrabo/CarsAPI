@@ -1,4 +1,6 @@
-﻿    <!DOCTYPE html>
+﻿ <!DOCTYPE html>
+@using Car_Utility
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,6 +33,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CarDetails" asp-action="IndexCarDetails">Car Details</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (httpAcc.HttpContext.Session.GetString(SD.SessionToken) != null &&
+                        httpAcc.HttpContext.Session.GetString(SD.SessionToken).ToString().Length > 0)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

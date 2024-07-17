@@ -1,6 +1,6 @@
 ﻿@model CarAPI_Web.Models.Dto.CarUpdateDTO
 
-<form asp-action="UpdateCar">
+<form asp-action="UpdateCar" enctype="multipart/form-data">
     <br />
     <div class="container border p-3">
         <h1 class="text-primary">Update Car</h1>
@@ -8,120 +8,130 @@
 
         <input hidden asp-for="Id"/>
         <div class="row">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-10">
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                    <div class="col-2">
+                        <label asp-for="Make" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Make" class="form-control" />
+                        <span asp-validation-for="Make" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="Model" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Model" class="form-control" />
+                        <span asp-validation-for="Model" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="col-2">
+                        <label asp-for="Year" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Year" class="form-control" />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="VIN" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="VIN" class="form-control" />
+                        <span asp-validation-for="VIN" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="EngineType" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="EngineType" class="form-control" />
+                        <span asp-validation-for="EngineType" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="TransmissionType" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="TransmissionType" class="form-control" />
+                        <span asp-validation-for="TransmissionType" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="Color" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Color" class="form-control" />
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="Mileage" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Mileage" class="form-control" />
+                        <span asp-validation-for="Mileage" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="Price" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="FuelEfficiency" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="FuelEfficiency" class="form-control" />
+                        <span asp-validation-for="FuelEfficiency" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="BodyType" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="BodyType" class="form-control" />
+                        <span asp-validation-for="BodyType" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="Condition" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Condition" class="form-control" />
+                        <span asp-validation-for="Condition" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+                    <div class="col-10 pb-3">
+                        <input asp-for="Image" class="form-control" />
+                        <input asp-for="ImageLocalPath" hidden class="form-control" />
+                        <input asp-for="ImageUrl" hidden class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-5 offset-2">
+                        <a asp-action="IndexCar" asp-controller="Car" class="btn-primary btn form-control ">Back to List</a>
+                    </div>
+                    <div class="col-5">
+                        <input type="submit" value="Update" class="btn btn-success form-control" />
+                    </div>
+                </div>
+            </div>
             <div class="col-2">
-                <label asp-for="Make" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Make" class="form-control" />
-                <span asp-validation-for="Make" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Model" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
-            </div>
-
-
-            <div class="col-2">
-                <label asp-for="Year" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="VIN" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="VIN" class="form-control" />
-                <span asp-validation-for="VIN" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="EngineType" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="EngineType" class="form-control" />
-                <span asp-validation-for="EngineType" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="TransmissionType" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="TransmissionType" class="form-control" />
-                <span asp-validation-for="TransmissionType" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Color" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Color" class="form-control" />
-                <span asp-validation-for="Color" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Mileage" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Mileage" class="form-control" />
-                <span asp-validation-for="Mileage" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Price" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="FuelEfficiency" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="FuelEfficiency" class="form-control" />
-                <span asp-validation-for="FuelEfficiency" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="BodyType" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="BodyType" class="form-control" />
-                <span asp-validation-for="BodyType" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Condition" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Condition" class="form-control" />
-                <span asp-validation-for="Condition" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-
-            <div class="col-5 offset-2">
-                <a asp-action="IndexCar" asp-controller="Car" class="btn-primary btn form-control ">Back to List</a>
-            </div>
-            <div class="col-5">
-                <input type="submit" value="Update" class="btn btn-success form-control" />
+                <img class="w-100" asp-append-version="true" src="@Model.ImageUrl" alt=""/>
             </div>
         </div>
+       
     </div>
 </form>
 

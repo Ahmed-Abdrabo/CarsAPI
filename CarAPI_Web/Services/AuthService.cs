@@ -23,7 +23,7 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = carUrl + "/api/v1/UsersAuth/login"
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/UsersAuth/login"
             });
         }
 
@@ -33,7 +33,7 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = carUrl + "/api/v1/UsersAuth/register"
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/UsersAuth/register"
             });
         }
     }

@@ -10,11 +10,11 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CarsAPI.Controllers.v1
+namespace CarsAPI.Controllers.v2
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class CarAPIController : ControllerBase
     {
         protected APIResponse _response;
@@ -28,7 +28,6 @@ namespace CarsAPI.Controllers.v1
         }
 
         [HttpGet]
-       // [ResponseCache(CacheProfileName = "Default30")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -106,12 +105,12 @@ namespace CarsAPI.Controllers.v1
             return _response;
         }
 
-        [Authorize(Roles = "admin")]
+      //  [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateCar([FromBody] CarCreateDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateCar([FromForm] CarCreateDTO createDTO)
         {
             try
             {
@@ -122,23 +121,33 @@ namespace CarsAPI.Controllers.v1
                 }
 
                 var car = _mapper.Map<Car>(createDTO);
-                //Car model = new()
-                //{
-                //Make = createDTO.Make,
-                //Model = createDTO.Model,
-                //Year = createDTO.Year,
-                //VIN = createDTO.VIN,
-                //EngineType = createDTO.EngineType,
-                //TransmissionType = createDTO.TransmissionType,
-                //Color = createDTO.Color,
-                //Mileage = createDTO.Mileage,
-                //Price = createDTO.Price,
-                //FuelEfficiency = createDTO.FuelEfficiency,
-                //BodyType = createDTO.BodyType,
-                //Condition = createDTO.Condition,
-                //ImageUrl = createDTO.ImageUrl
-                // };
+               
                 await _dbCar.CreateAsync(car);
+                if (createDTO.Image != null)
+                {
+                    string fileName=car.Id+Path.GetExtension(createDTO.Image.FileName);
+                    string filePath = @"wwwroot\ProductImage\" + fileName;
+
+                    var directoryLocation=Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    FileInfo file = new FileInfo(directoryLocation);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                    using(var fileStream=new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        createDTO.Image.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    car.ImageUrl = baseUrl+ "/ProductImage/"+fileName;
+                    car.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    car.ImageUrl = "https://placehold.co/600x400";
+                }
+                await _dbCar.UpdateAsync(car);
                 _response.Result = _mapper.Map<CarDTO>(car);
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetCar", new { id = car.Id }, _response);
@@ -157,7 +166,7 @@ namespace CarsAPI.Controllers.v1
         [HttpPut("{id:int}", Name = "UpdateCar")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromForm] CarUpdateDTO updateDTO)
         {
             try
             {
@@ -168,22 +177,32 @@ namespace CarsAPI.Controllers.v1
                 }
                 var model = _mapper.Map<Car>(updateDTO);
 
-                //Car model = new()
-                //{
-                //    Make = updateDTO.Make,
-                //    Model = updateDTO.Model,
-                //    Year = updateDTO.Year,
-                //    VIN = updateDTO.VIN,
-                //    EngineType = updateDTO.EngineType,
-                //    TransmissionType = updateDTO.TransmissionType,
-                //    Color = updateDTO.Color,
-                //    Mileage = updateDTO.Mileage,
-                //    Price = updateDTO.Price,
-                //    FuelEfficiency = updateDTO.FuelEfficiency,
-                //    BodyType = updateDTO.BodyType,
-                //    Condition = updateDTO.Condition,
-                //    ImageUrl = updateDTO.ImageUrl
-                //};
+                if (updateDTO.Image != null)
+                {
+                    if (!string.IsNullOrEmpty(model.ImageLocalPath))
+                    {
+                        var oldFilePathDirectory=Path.Combine(Directory.GetCurrentDirectory(),model.ImageLocalPath);
+                        FileInfo file = new FileInfo(oldFilePathDirectory);
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                        }
+                    }
+                    string fileName = updateDTO.Id + Path.GetExtension(updateDTO.Image.FileName);
+                    string filePath = @"wwwroot\ProductImage\" + fileName;
+
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                   
+                    using (var fileStream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        updateDTO.Image.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    model.ImageUrl = baseUrl + "/ProductImage/" + fileName;
+                    model.ImageLocalPath = filePath;
+                }
+               
                 await _dbCar.UpdateAsync(model);
 
                 _response.StatusCode = HttpStatusCode.NoContent;
@@ -219,6 +238,15 @@ namespace CarsAPI.Controllers.v1
                 {
                     _response.IsSuccess = false;
                     return NotFound();
+                }
+                if (!string.IsNullOrEmpty(car.ImageLocalPath))
+                {
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), car.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldFilePathDirectory);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
                 }
                 await _dbCar.RemoveAsync(car);
                 _response.StatusCode = HttpStatusCode.NoContent;

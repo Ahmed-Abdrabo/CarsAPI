@@ -39,7 +39,7 @@ namespace CarsAPI.Data
                     FuelEfficiency = 28.5,
                     BodyType = "Sedan",
                     Condition = "Used",
-                    ImageUrl = "https://example.com/toyota_camry_image.jpg"
+                    ImageUrl = "https://placehold.co/600x401"
                 },
                 new Car
                 {
@@ -56,7 +56,7 @@ namespace CarsAPI.Data
                     FuelEfficiency = 30.2,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://example.com/honda_crv_image.jpg"
+                    ImageUrl = "https://placehold.co/600x402"
                 },
                 new Car
                 {
@@ -73,7 +73,7 @@ namespace CarsAPI.Data
                     FuelEfficiency = 25.0,
                     BodyType = "Coupe",
                     Condition = "New",
-                    ImageUrl = "https://example.com/ford_mustang_image.jpg"
+                    ImageUrl = "https://placehold.co/600x403"
                 },
                 new Car
                 {
@@ -90,7 +90,7 @@ namespace CarsAPI.Data
                     FuelEfficiency = 18.6,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://example.com/chevrolet_tahoe_image.jpg"
+                    ImageUrl = "https://placehold.co/600x404"
                 },
                 new Car
                 {
@@ -107,7 +107,7 @@ namespace CarsAPI.Data
                     FuelEfficiency = 24.5,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://example.com/bmw_x5_image.jpg"
+                    ImageUrl = "https://placehold.co/600x405"
                 }
             );
         }

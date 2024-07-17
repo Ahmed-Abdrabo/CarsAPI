@@ -1,13 +1,13 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarsAPI", "CarsAPI\CarsAPI.csproj", "{71527BB6-AE3A-47CA-BD91-DDFDA11E27AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarAPI_Web", "CarAPI_Web\CarAPI_Web.csproj", "{D3A499A5-7B14-47E0-8E45-FF3641082D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarAPI_Web", "CarAPI_Web\CarAPI_Web.csproj", "{D3A499A5-7B14-47E0-8E45-FF3641082D72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Car_Utility", "Car_Utility\Car_Utility.csproj", "{7D84AD5F-77CA-4C4E-9A71-01BEED2BBAFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car_Utility", "Car_Utility\Car_Utility.csproj", "{7D84AD5F-77CA-4C4E-9A71-01BEED2BBAFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

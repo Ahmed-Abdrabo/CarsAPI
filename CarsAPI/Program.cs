@@ -54,11 +54,11 @@ builder.Services.AddAuthentication(x =>
     });
 
 builder.Services.AddControllers(option => {
-    option.CacheProfiles.Add("Default30",
-       new CacheProfile()
-       {
-           Duration = 30
-       });
+    //option.CacheProfiles.Add("Default30",
+    //   new CacheProfile()
+    //   {
+    //       Duration = 30
+    //   });
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -107,18 +107,33 @@ builder.Services.AddSwaggerGen(options => {
     });
 
 });
+
 var app = builder.Build();
+using var scope= app.Services.CreateScope();
+var services=scope.ServiceProvider;
+var _context=services.GetRequiredService<ApplicationDbContext>();
+var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+try
+{
+    await _context.Database.MigrateAsync();
+}
+catch (Exception ex)
+{
+    var logger = loggerFactory.CreateLogger<Program>();
+    logger.LogError(ex, "an error has been accured during apply the application");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options => {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CarsAPIV1");
         options.SwaggerEndpoint("/swagger/v2/swagger.json", "CarsAPIV2");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CarsAPIV1");
     });
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthorization();

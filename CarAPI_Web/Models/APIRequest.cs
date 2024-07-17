@@ -9,5 +9,6 @@ namespace CarAPI_Web.Models
         public object Data { get; set; }
         public string Token { get; set; }
  
+        public ContentType ContentType { get; set; }=ContentType.Json;
     }
 }

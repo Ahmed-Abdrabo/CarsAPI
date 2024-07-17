@@ -22,8 +22,9 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = carUrl + "/api/v1/CarAPI",
-                Token = token
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI",
+                Token = token,
+                ContentType=SD.ContentType.MultipartFormData
             });
         }
 
@@ -32,7 +33,7 @@ namespace CarAPI_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = carUrl + "/api/v1/CarAPI/" + id,
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + id,
                 Token = token
             });
         }
@@ -42,7 +43,7 @@ namespace CarAPI_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/v1/CarAPI",
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI",
                 Token = token
             });
         }
@@ -52,7 +53,7 @@ namespace CarAPI_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/v1/CarAPI/" + id,
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + id,
                 Token = token
             });
         }
@@ -63,8 +64,9 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto, 
-                Url = carUrl + "/api/v1/CarAPI/" + dto.Id,
-                Token = token
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + dto.Id,
+                Token = token,
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
     }

@@ -5,6 +5,7 @@ using CarAPI_Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -42,7 +43,7 @@ namespace CarAPI_Web.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                HttpContext.Session.SetString(SD.SessionToken, model.Token);
+                HttpContext.Session.SetString(SD.AccessToken, model.Token);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -55,6 +56,11 @@ namespace CarAPI_Web.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            var roleList = new List<SelectListItem>() {
+                new SelectListItem{Text=SD.Admin,Value=SD.Admin},
+                new SelectListItem{Text=SD.Customer,Value=SD.Customer}
+            };
+            ViewBag.RoleList = roleList;
             return View();
         }
 
@@ -63,11 +69,20 @@ namespace CarAPI_Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterationRequestDTO obj)
         {
+            if (string.IsNullOrEmpty(obj.Role))
+            {
+                obj.Role=SD.Customer;
+            }
             APIResponse result = await _authService.RegisterAsync<APIResponse>(obj);
             if (result != null && result.IsSuccess)
             {
                 return RedirectToAction("Login");
             }
+            var roleList = new List<SelectListItem>() {
+                new SelectListItem{Text=SD.Admin,Value=SD.Admin},
+                new SelectListItem{Text=SD.Customer,Value=SD.Customer}
+            };
+            ViewBag.RoleList = roleList;
             return View();
         }
 
@@ -75,7 +90,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            HttpContext.Session.SetString(SD.SessionToken, "");
+            HttpContext.Session.SetString(SD.AccessToken, "");
             return RedirectToAction("Index", "Home");
         }
 

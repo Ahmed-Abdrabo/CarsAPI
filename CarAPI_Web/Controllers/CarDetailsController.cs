@@ -29,7 +29,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> IndexCarDetails()
         {
             List<CarDetailsDTO> list = new();
-            var response = await _carDetailsService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _carDetailsService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<CarDetailsDTO>>(Convert.ToString(response.Result));
@@ -41,7 +41,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> CreateCarDetails()
         {
             CarDetailsCreateVM CarDetailsVM = new();
-            var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 CarDetailsVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>
@@ -62,7 +62,7 @@ namespace CarAPI_Web.Controllers
             if (ModelState.IsValid)
             {
 
-                var response = await _carDetailsService.CreateAsync<APIResponse>(CarDto.CarDetails, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _carDetailsService.CreateAsync<APIResponse>(CarDto.CarDetails, HttpContext.Session.GetString(SD.AccessToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexCarDetails));
@@ -75,7 +75,7 @@ namespace CarAPI_Web.Controllers
                     }
                 }   
             }
-            var resp = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            var resp = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (resp != null && resp.IsSuccess)
             {
                 CarDto.CarList = JsonConvert.DeserializeObject<List<CarDTO>>
@@ -92,13 +92,13 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> UpdateCarDetails(int CarDetailsId)
         {
             CarDetailsUpdateVM CarDetailsVM = new();    
-            var response = await _carDetailsService.GetAsync<APIResponse>(CarDetailsId, HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _carDetailsService.GetAsync<APIResponse>(CarDetailsId, HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 CarDetailsDTO carDto = JsonConvert.DeserializeObject<CarDetailsDTO>(Convert.ToString(response.Result));
                 CarDetailsVM.CarDetails= _mapper.Map<CarDetailsUpdateDTO>(carDto);
             }
-            response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 CarDetailsVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>
@@ -120,7 +120,7 @@ namespace CarAPI_Web.Controllers
             if (ModelState.IsValid)
             {
 
-                var response = await _carDetailsService.UpdateAsync<APIResponse>(CarDto.CarDetails, HttpContext.Session.GetString(SD.SessionToken));
+                var response = await _carDetailsService.UpdateAsync<APIResponse>(CarDto.CarDetails, HttpContext.Session.GetString(SD.AccessToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexCarDetails));
@@ -133,7 +133,7 @@ namespace CarAPI_Web.Controllers
                     }
                 }
             }
-            var resp = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            var resp = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (resp != null && resp.IsSuccess)
             {
                 CarDto.CarList = JsonConvert.DeserializeObject<List<CarDTO>>
@@ -150,13 +150,13 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> DeleteCarDetails(int CarDetailsId)
         {
             CarDetailsDeleteVM CarDetailsVM = new();
-            var response = await _carDetailsService.GetAsync<APIResponse>(CarDetailsId, HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _carDetailsService.GetAsync<APIResponse>(CarDetailsId, HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 CarDetailsDTO carDto = JsonConvert.DeserializeObject<CarDetailsDTO>(Convert.ToString(response.Result));
                 CarDetailsVM.CarDetails = carDto;
             }
-            response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+            response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 CarDetailsVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>
@@ -176,7 +176,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> DeleteCarDetails(CarDetailsDeleteVM carDto)
         {
 
-            var response = await _carDetailsService.DeleteAsync<APIResponse>(carDto.CarDetails.CarDetailsId, HttpContext.Session.GetString(SD.SessionToken));
+            var response = await _carDetailsService.DeleteAsync<APIResponse>(carDto.CarDetails.CarDetailsId, HttpContext.Session.GetString(SD.AccessToken));
             if (response != null && response.IsSuccess)
             {
                 return RedirectToAction(nameof(IndexCarDetails));

@@ -22,6 +22,8 @@ namespace CarsAPI.Models.Dto
         [Required]
         public string BodyType { get; set; }
         public string Condition { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? ImageLocalPath { get; set; }
+
     }
 }

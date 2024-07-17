@@ -22,7 +22,7 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = carUrl + "/api/v1/CarDetailsAPI",
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarDetailsAPI",
                 Token = token
             });
         }
@@ -42,7 +42,7 @@ namespace CarAPI_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/v1/CarDetailsAPI",
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarDetailsAPI",
                 Token = token
             });
         }
@@ -52,7 +52,7 @@ namespace CarAPI_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + "/api/v1/CarDetailsAPI/" + id,
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarDetailsAPI/" + id,
                 Token = token
             });
         }
@@ -63,7 +63,7 @@ namespace CarAPI_Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto, 
-                Url = carUrl + "/api/v1/CarDetailsAPI/" + dto.CarDetailsId,
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarDetailsAPI/" + dto.CarDetailsId,
                 Token = token
             });
         }

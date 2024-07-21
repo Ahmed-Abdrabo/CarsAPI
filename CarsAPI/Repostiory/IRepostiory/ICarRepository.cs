@@ -1,6 +1,6 @@
 ﻿using CarsAPI.Models;
 
-namespace CarsAPI.Repostiory.IRepostiory
+namespace CarsAPI.Repository.IRepostiory
 {
     public interface ICarRepository: IRepository<Car>
     {

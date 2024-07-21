@@ -1,8 +1,8 @@
 ﻿using CarsAPI.Data;
 using CarsAPI.Models;
-using CarsAPI.Repostiory.IRepostiory;
+using CarsAPI.Repository.IRepostiory;
 
-namespace CarsAPI.Repostiory
+namespace CarsAPI.Repository
 {
     public class CarDetailsRepository : Repository<CarDetails>, ICarDetailsRepository
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace CarsAPI.Repostiory.IRepostiory
+namespace CarsAPI.Repository.IRepostiory
 {
     public interface IRepository<T> where T : class
     {

@@ -5,67 +5,64 @@ using CarAPI_Web.Services.IServices;
 
 namespace CarAPI_Web.Services
 {
-    public class CarService: BaseService, ICarService
+    public class CarService: ICarService
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IBaseService _baseService;
         private string carUrl;
 
-        public CarService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
+        public CarService(IHttpClientFactory clientFactory, IConfiguration configuration, IBaseService baseService)
         {
             _clientFactory = clientFactory;
+            _baseService = baseService;
             carUrl = configuration.GetValue<string>("ServiceUrls:CarAPI");
 
         }
-        public Task<T> CreateAsync<T>(CarCreateDTO dto, string token)
+        public async Task<T> CreateAsync<T>(CarCreateDTO dto)
         {
-            return SendAsync<T>(new APIRequest()
+            return await _baseService.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
                 Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI",
-                Token = token,
                 ContentType=SD.ContentType.MultipartFormData
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id, string token)
+        public async Task<T> DeleteAsync<T>(int id)
         {
-            return SendAsync<T>(new APIRequest()
+            return await _baseService.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
                 Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + id,
-                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>(string token)
+        public async Task<T> GetAllAsync<T>()
         {
-            return SendAsync<T>(new APIRequest()
+            return await _baseService.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
                 Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI",
-                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id, string token)
+        public async Task<T> GetAsync<T>(int id)
         {
-            return SendAsync<T>(new APIRequest()
+            return await _baseService.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + id,
-                Token = token
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + id
             });
         }
 
-        public Task<T> UpdateAsync<T>(CarUpdateDTO dto, string token)
+        public async Task<T> UpdateAsync<T>(CarUpdateDTO dto)
         {
-            return SendAsync<T>(new APIRequest()
+            return await _baseService.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto, 
                 Url = carUrl + $"/api/{SD.CurrentApiVersion}/CarAPI/" + dto.Id,
-                Token = token,
                 ContentType = SD.ContentType.MultipartFormData
             });
         }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CarsAPI.Models;
 using CarsAPI.Models.Dto;
-using CarsAPI.Repostiory;
-using CarsAPI.Repostiory.IRepostiory;
+using CarsAPI.Repository;
+using CarsAPI.Repository.IRepostiory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

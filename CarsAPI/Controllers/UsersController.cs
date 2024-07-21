@@ -1,6 +1,6 @@
 ﻿using CarsAPI.Models;
 using CarsAPI.Models.Dto;
-using CarsAPI.Repostiory.IRepostiory;
+using CarsAPI.Repository.IRepostiory;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -22,22 +22,22 @@ namespace CarsAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
          {
-            var loginResponse = await _userRepo.Login(model);
-            if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
+            TokenDTO tokenDTO = await _userRepo.Login(model);
+            if (tokenDTO == null || string.IsNullOrEmpty(tokenDTO.AccessToken))
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;
-                _response.ErrorMessages.Add("Username or password is incorrect");
+                _response.ErrorMessages.Add("UserName or password is incorrect");
                 return BadRequest(_response);
             }
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result = loginResponse;
+            _response.Result = tokenDTO;
             return Ok(_response);
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterationRequestDTO model)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDTO model)
         {
             bool ifUserNameUnique = _userRepo.IsUniqueUser(model.UserName);
             if (!ifUserNameUnique)

@@ -23,7 +23,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> IndexCar()
         {
             List<CarDTO> list = new();
-            var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.AccessToken));
+            var response = await _carService.GetAllAsync<APIResponse>();
             if (response != null && response.IsSuccess)
             {
                 list=JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result));
@@ -46,7 +46,7 @@ namespace CarAPI_Web.Controllers
 			if (ModelState.IsValid)
 			{
 
-				var response = await _carService.CreateAsync<APIResponse>(CarDto, HttpContext.Session.GetString(SD.AccessToken));
+				var response = await _carService.CreateAsync<APIResponse>(CarDto);
 				if (response != null && response.IsSuccess)
 				{
                     TempData["success"] = "Car created successfully";
@@ -60,7 +60,7 @@ namespace CarAPI_Web.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCar(int carId)
         {
-            var response = await _carService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.AccessToken));
+            var response = await _carService.GetAsync<APIResponse>(carId);
             if (response != null && response.IsSuccess)
             {   
                 CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
@@ -77,7 +77,7 @@ namespace CarAPI_Web.Controllers
             if (ModelState.IsValid)
             {
                 TempData["success"] = "Car updated successfully";
-                var response = await _carService.UpdateAsync<APIResponse>(carDto, HttpContext.Session.GetString(SD.AccessToken));
+                var response = await _carService.UpdateAsync<APIResponse>(carDto);
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexCar));
@@ -90,7 +90,7 @@ namespace CarAPI_Web.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCar(int carId)
 		{
-			var response = await _carService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.AccessToken));
+			var response = await _carService.GetAsync<APIResponse>(carId);
 			if (response != null && response.IsSuccess)
 			{
 				CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
@@ -105,7 +105,7 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> DeleteCar(CarDTO carDto)
 		{
 
-			var response = await _carService.DeleteAsync<APIResponse>(carDto.Id, HttpContext.Session.GetString(SD.AccessToken));
+			var response = await _carService.DeleteAsync<APIResponse>(carDto.Id);
 			if (response != null && response.IsSuccess)
 			{
                 TempData["success"] = "Car deleted successfully";

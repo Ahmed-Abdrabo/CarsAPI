@@ -11,13 +11,14 @@ namespace CarAPI_Web.Services
     {
         public APIResponse responseModel { get; set; }
         public IHttpClientFactory httpClient { get; set; }
-
-        public BaseService(IHttpClientFactory httpClient)
+        public ITokenProvider _tokenProvider { get; set; }
+        public BaseService(IHttpClientFactory httpClient, ITokenProvider tokenProvider)
         { 
             this.responseModel = new();
             this.httpClient = httpClient;
+            this._tokenProvider = tokenProvider;
         }
-        public async Task<T> SendAsync<T>(APIRequest apiRequest)
+        public async Task<T> SendAsync<T>(APIRequest apiRequest, bool withBearer = true)
         {
             try
             {
@@ -32,6 +33,11 @@ namespace CarAPI_Web.Services
                     message.Headers.Add("Accept", "application/json");
                 }
                 message.RequestUri = new Uri(apiRequest.Url);
+                if (withBearer && _tokenProvider.GetToken() != null)
+                {
+                    var token = _tokenProvider.GetToken();  
+                    client.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",token.AccessToken);
+                }
                 if(apiRequest.ContentType == SD.ContentType.MultipartFormData)
                 {
                     var content = new MultipartFormDataContent();

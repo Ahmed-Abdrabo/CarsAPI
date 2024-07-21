@@ -1,8 +1,8 @@
 using CarsAPI;
 using CarsAPI.Data;
 using CarsAPI.Models;
-using CarsAPI.Repostiory;
-using CarsAPI.Repostiory.IRepostiory;
+using CarsAPI.Repository;
+using CarsAPI.Repository.IRepostiory;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

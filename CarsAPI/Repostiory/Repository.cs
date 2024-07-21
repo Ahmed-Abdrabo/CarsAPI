@@ -1,10 +1,10 @@
 ﻿using CarsAPI.Data;
-using CarsAPI.Repostiory.IRepostiory;
+using CarsAPI.Repository.IRepostiory;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace CarsAPI.Repostiory
+namespace CarsAPI.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

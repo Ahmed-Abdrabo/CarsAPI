@@ -13,7 +13,7 @@ namespace CarsAPI.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarDetails> CarDetails { get; set; }
         public DbSet<LocalUser> LocalUsers { get; set; }
-
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

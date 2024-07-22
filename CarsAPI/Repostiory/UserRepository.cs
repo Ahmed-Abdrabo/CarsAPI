@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarsAPI.Repository
 {
@@ -56,10 +57,13 @@ namespace CarsAPI.Repository
                 };
             }
 
-
+            var jwtTokenId = $"JTI{Guid.NewGuid()}";
+            var accessToken = await GetAccessToken(user, jwtTokenId);
+            var refreshToken = await CreateNewRefreshToken(user.Id,jwtTokenId);
             TokenDTO tokenDTO = new TokenDTO()
             {
-                AccessToken = await GetAccessToken(user)
+                AccessToken = accessToken,
+                RefreshToken= refreshToken
             };
             return tokenDTO;
         }
@@ -98,7 +102,7 @@ namespace CarsAPI.Repository
             return new UserDTO();
         }
 
-        private async Task<string> GetAccessToken(ApplicationUser user)
+        private async Task<string> GetAccessToken(ApplicationUser user, string jwtTokenId)
         {
             //if user was found generate JWT Token
             var roles = await _userManager.GetRolesAsync(user);
@@ -110,9 +114,11 @@ namespace CarsAPI.Repository
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.UserName.ToString()),
-                    new Claim(ClaimTypes.Role, roles.FirstOrDefault())
+                    new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
+                    new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -121,5 +127,84 @@ namespace CarsAPI.Repository
             return tokenStr;
         }
 
+        public async Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
+        {
+            var existingRefreshToken= await _db.RefreshTokens.FirstOrDefaultAsync(u=>u.Refresh_Token==tokenDTO.RefreshToken);
+            if (existingRefreshToken==null)
+            {
+                return new TokenDTO();
+            }
+            var accessTokenData = GetAccessTokenData(tokenDTO.AccessToken);
+            if (!accessTokenData.isSuccessful||accessTokenData.userId!=existingRefreshToken.UserId
+                ||accessTokenData.tokenId!=existingRefreshToken.JwtTokenId)
+            {
+                existingRefreshToken.IsValid = false;
+                _db.SaveChanges();
+                return new TokenDTO();
+            }
+            
+            if(!existingRefreshToken.IsValid)
+            {
+                var chainRecords =await _db.RefreshTokens.Where(u => u.UserId == existingRefreshToken.UserId
+                && u.JwtTokenId == existingRefreshToken.JwtTokenId).ExecuteUpdateAsync(u => u.SetProperty(refreshToken => refreshToken.IsValid, false));
+              
+                return new TokenDTO();
+            }
+
+            if (existingRefreshToken.ExpiresAt < DateTime.UtcNow)
+            {
+                existingRefreshToken.IsValid = false;
+                _db.SaveChanges();
+                return new TokenDTO();
+            }
+            var newRefreshToken=await CreateNewRefreshToken(existingRefreshToken.UserId,existingRefreshToken.JwtTokenId);
+            existingRefreshToken.IsValid = false;
+            _db.SaveChanges();
+
+
+            var appUser=_db.ApplicationUsers.FirstOrDefault(u=>u.Id==existingRefreshToken.UserId);
+            if(appUser==null)
+            {
+                return new TokenDTO();
+            }
+            var newAccessToken=await GetAccessToken(appUser,existingRefreshToken.JwtTokenId);
+
+            return new TokenDTO()
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+            };
+        }
+
+        private async Task<string> CreateNewRefreshToken(string userId,string tokenId)
+        {
+            RefreshToken refreshToken = new RefreshToken()
+            {
+                IsValid = true,
+                UserId = userId,
+                JwtTokenId = tokenId,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(3),
+                Refresh_Token=Guid.NewGuid()+"-"+Guid.NewGuid()
+            };
+            await _db.RefreshTokens.AddAsync(refreshToken);
+            await _db.SaveChangesAsync();
+            return refreshToken.Refresh_Token;
+        }
+
+        private (bool isSuccessful, string userId, string tokenId) GetAccessTokenData(string accessToken)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwt = tokenHandler.ReadJwtToken(accessToken);
+                var jwtTokenId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Jti).Value;
+                var userId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value;
+                return (true, userId, jwtTokenId);
+            }
+            catch (Exception ex)
+            {
+                return (false, null, null);
+            }
+        }
     }
 }

@@ -60,5 +60,33 @@ namespace CarsAPI.Controllers
             _response.IsSuccess = true;
             return Ok(_response);
         }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> GetNewTokenFromRefreshToken([FromBody] TokenDTO tokenDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var tokenDtoResponse=await _userRepo.RefreshAccessToken(tokenDTO);
+                if (tokenDtoResponse == null || string.IsNullOrEmpty(tokenDtoResponse.AccessToken))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Invalid Token");
+                    return BadRequest(_response);
+                }
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = tokenDtoResponse;
+                return Ok(_response);
+
+            }
+            else
+            {
+                _response.IsSuccess=false;
+                _response.Result = "Invalid Input";
+                return BadRequest(_response);
+            }
+            
+        }
     }
 }

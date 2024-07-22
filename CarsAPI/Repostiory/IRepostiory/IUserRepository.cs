@@ -8,5 +8,6 @@ namespace CarsAPI.Repository.IRepostiory
         bool IsUniqueUser(string username);
         Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
         Task<UserDTO> Register(RegistrationRequestDTO registerationRequestDTO);
+        Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
     }
 }

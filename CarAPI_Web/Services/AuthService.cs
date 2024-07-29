@@ -37,5 +37,14 @@ namespace CarAPI_Web.Services
                 Url = carUrl + $"/api/{SD.CurrentApiVersion}/UsersAuth/register"
             }, withBearer: false);
         }
+        public async Task<T> LogOutAsync<T>(TokenDTO obj)
+        {
+            return await _baseService.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = obj,
+                Url = carUrl + $"/api/{SD.CurrentApiVersion}/UsersAuth/revoke"
+            });
+        }
     }
 }

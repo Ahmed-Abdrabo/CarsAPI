@@ -9,5 +9,6 @@ namespace CarsAPI.Repository.IRepostiory
         Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
         Task<UserDTO> Register(RegistrationRequestDTO registerationRequestDTO);
         Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
+        Task RevokeRefreshToken(TokenDTO tokenDTO);
     }
 }

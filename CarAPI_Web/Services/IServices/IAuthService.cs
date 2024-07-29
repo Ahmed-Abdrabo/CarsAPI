@@ -1,4 +1,4 @@
-﻿using CarAPI_Web.Models.Dto;
+﻿    using CarAPI_Web.Models.Dto;
 
 namespace CarAPI_Web.Services.IServices
 {
@@ -6,5 +6,6 @@ namespace CarAPI_Web.Services.IServices
     {
         Task<T> LoginAsync<T>(LoginRequestDTO objToCreate);
         Task<T> RegisterAsync<T>(RegisterationRequestDTO objToCreate);  
+        Task<T> LogOutAsync<T>(TokenDTO obj);  
     }
 }

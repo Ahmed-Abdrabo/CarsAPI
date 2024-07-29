@@ -102,6 +102,21 @@ namespace CarsAPI.Repository
             return new UserDTO();
         }
 
+        public async Task RevokeRefreshToken(TokenDTO tokenDTO)
+        {
+            var existingRefreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(u => u.Refresh_Token == tokenDTO.RefreshToken);
+
+            if (existingRefreshToken == null)
+                return;
+            var isTokenValid = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+            if (!isTokenValid)
+            {
+                return;
+            }
+
+            await MarkAllTokenInChainAsInvalid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+
+        }
         private async Task<string> GetAccessToken(ApplicationUser user, string jwtTokenId)
         {
             //if user was found generate JWT Token
@@ -134,32 +149,26 @@ namespace CarsAPI.Repository
             {
                 return new TokenDTO();
             }
-            var accessTokenData = GetAccessTokenData(tokenDTO.AccessToken);
-            if (!accessTokenData.isSuccessful||accessTokenData.userId!=existingRefreshToken.UserId
-                ||accessTokenData.tokenId!=existingRefreshToken.JwtTokenId)
+            var isTokenValid = GetAccessTokenData(tokenDTO.AccessToken,existingRefreshToken.UserId,existingRefreshToken.JwtTokenId);
+            if (!isTokenValid)
             {
-                existingRefreshToken.IsValid = false;
-                _db.SaveChanges();
-                return new TokenDTO();
-            }
-            
-            if(!existingRefreshToken.IsValid)
-            {
-                var chainRecords =await _db.RefreshTokens.Where(u => u.UserId == existingRefreshToken.UserId
-                && u.JwtTokenId == existingRefreshToken.JwtTokenId).ExecuteUpdateAsync(u => u.SetProperty(refreshToken => refreshToken.IsValid, false));
-              
+                await MarkTokenAsInvalid(existingRefreshToken);
                 return new TokenDTO();
             }
 
+            if (!existingRefreshToken.IsValid)
+            {
+                await MarkAllTokenInChainAsInvalid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+            }
             if (existingRefreshToken.ExpiresAt < DateTime.UtcNow)
             {
-                existingRefreshToken.IsValid = false;
-                _db.SaveChanges();
+                await MarkTokenAsInvalid(existingRefreshToken);
                 return new TokenDTO();
             }
             var newRefreshToken=await CreateNewRefreshToken(existingRefreshToken.UserId,existingRefreshToken.JwtTokenId);
-            existingRefreshToken.IsValid = false;
-            _db.SaveChanges();
+
+
+            await MarkTokenAsInvalid(existingRefreshToken);
 
 
             var appUser=_db.ApplicationUsers.FirstOrDefault(u=>u.Id==existingRefreshToken.UserId);
@@ -183,7 +192,7 @@ namespace CarsAPI.Repository
                 IsValid = true,
                 UserId = userId,
                 JwtTokenId = tokenId,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(3),
+                ExpiresAt = DateTime.UtcNow.AddMinutes(2),
                 Refresh_Token=Guid.NewGuid()+"-"+Guid.NewGuid()
             };
             await _db.RefreshTokens.AddAsync(refreshToken);
@@ -191,7 +200,7 @@ namespace CarsAPI.Repository
             return refreshToken.Refresh_Token;
         }
 
-        private (bool isSuccessful, string userId, string tokenId) GetAccessTokenData(string accessToken)
+        private bool GetAccessTokenData(string accessToken,string expectedUserId,string expectedTokenId)
         {
             try
             {
@@ -199,12 +208,28 @@ namespace CarsAPI.Repository
                 var jwt = tokenHandler.ReadJwtToken(accessToken);
                 var jwtTokenId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Jti).Value;
                 var userId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value;
-                return (true, userId, jwtTokenId);
+                return userId==expectedUserId && jwtTokenId==expectedTokenId;
             }
             catch (Exception ex)
             {
-                return (false, null, null);
+                return false;
             }
         }
+        private async Task MarkAllTokenInChainAsInvalid(string userId, string TokenId)
+        {
+            await _db.RefreshTokens.Where(u => u.UserId == userId
+              && u.JwtTokenId == TokenId)
+                .ExecuteUpdateAsync(u => u.SetProperty(refreshToken => refreshToken.IsValid, false));
+
+        }
+
+        
+        private Task MarkTokenAsInvalid(RefreshToken refreshToken)
+        {
+            refreshToken.IsValid = false;
+           return _db.SaveChangesAsync();
+        }
+
+      
     }
 }

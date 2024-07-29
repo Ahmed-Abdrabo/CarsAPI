@@ -1,4 +1,6 @@
-﻿using Car_Utility;
+﻿// Ignore Spelling: Auth
+
+using Car_Utility;
 using CarAPI_Web.Models;
 using CarAPI_Web.Models.Dto;
 using CarAPI_Web.Services.IServices;
@@ -94,6 +96,8 @@ namespace CarAPI_Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+            var token=_tokenProvider.GetToken();
+            await _authService.LogOutAsync<APIResponse>(token);
             _tokenProvider.ClearToken();
             return RedirectToAction("Index", "Home");
         }

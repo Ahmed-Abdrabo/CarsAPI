@@ -66,6 +66,11 @@ namespace CarAPI_Web.Controllers
                 CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
                 return View(_mapper.Map<CarUpdateDTO>(carDto));
             }
+            else
+            {
+                TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                    response.ErrorMessages[0] : "Error Encountered";
+            }
             return NotFound();
         }
 
@@ -76,14 +81,19 @@ namespace CarAPI_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempData["success"] = "Car updated successfully";
                 var response = await _carService.UpdateAsync<APIResponse>(carDto);
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "Car updated successfully";
                     return RedirectToAction(nameof(IndexCar));
                 }
+                else
+                {
+                    TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                        response.ErrorMessages[0] : "Error Encountered";
+                }
             }
-            TempData["error"] = "Error encountered.";
+
             return View(carDto);
         }
 
@@ -95,8 +105,13 @@ namespace CarAPI_Web.Controllers
 			{
 				CarDTO carDto = JsonConvert.DeserializeObject<CarDTO>(Convert.ToString(response.Result));
 				return View(carDto);
-			}
-			return NotFound();
+            }
+            else
+            {
+                TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                    response.ErrorMessages[0] : "Error Encountered";
+            }
+            return NotFound();
 		}
 
 		[HttpPost]
@@ -111,7 +126,11 @@ namespace CarAPI_Web.Controllers
                 TempData["success"] = "Car deleted successfully";
                 return RedirectToAction(nameof(IndexCar));
 			}
-            TempData["error"] = "Error encountered.";
+            else
+            {
+                TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                    response.ErrorMessages[0] : "Error Encountered";
+            }
             return View(carDto);
 		}
 	}

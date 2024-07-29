@@ -69,10 +69,8 @@ namespace CarAPI_Web.Controllers
                 }
                 else
                 {
-                    if (response.ErrorMessages.Count > 0)
-                    {
-                        ModelState.AddModelError("ErrorMessages", response.ErrorMessages.FirstOrDefault());
-                    }
+                    TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                        response.ErrorMessages[0] : "Error Encountered";
                 }   
             }
             var resp = await _carService.GetAllAsync<APIResponse>();
@@ -106,8 +104,13 @@ namespace CarAPI_Web.Controllers
                     {
                         Text = i.Make,
                         Value = i.Id.ToString()
-                    }); 
+                    });
                 return View(CarDetailsVM);
+            }
+            else
+            {
+                TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                    response.ErrorMessages[0] : "Error Encountered";
             }
             return NotFound();
         }
@@ -127,10 +130,8 @@ namespace CarAPI_Web.Controllers
                 }
                 else
                 {
-                    if (response.ErrorMessages.Count > 0)
-                    {
-                        ModelState.AddModelError("ErrorMessages", response.ErrorMessages.FirstOrDefault());
-                    }
+                    TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                        response.ErrorMessages[0] : "Error Encountered";
                 }
             }
             var resp = await _carService.GetAllAsync<APIResponse>();
@@ -181,7 +182,11 @@ namespace CarAPI_Web.Controllers
             {
                 return RedirectToAction(nameof(IndexCarDetails));
             }
-
+            else
+            {
+                TempData["error"] = (response.ErrorMessages != null && response.ErrorMessages.Count > 0) ?
+                    response.ErrorMessages[0] : "Error Encountered";
+            }
             return View(carDto);
         }
     }

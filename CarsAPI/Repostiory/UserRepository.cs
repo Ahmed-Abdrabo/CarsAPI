@@ -134,6 +134,8 @@ namespace CarsAPI.Repository
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
+                Issuer = "https://cars-api.com",
+                Audience="https://test.com",
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

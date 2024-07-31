@@ -1,15 +1,20 @@
 using CarsAPI;
 using CarsAPI.Data;
+using CarsAPI.Extensions;
+using CarsAPI.Filters;
+using CarsAPI.Middlewares;
 using CarsAPI.Models;
 using CarsAPI.Repository;
 using CarsAPI.Repository.IRepostiory;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
@@ -59,11 +64,13 @@ builder.Services.AddAuthentication(x =>
     });
 
 builder.Services.AddControllers(option => {
-    //option.CacheProfiles.Add("Default30",
-    //   new CacheProfile()
-    //   {
-    //       Duration = 30
-    //   });
+  option.Filters.Add<CustomExceptionFilter>();
+}).ConfigureApiBehaviorOptions(option =>
+{
+    option.ClientErrorMapping[StatusCodes.Status500InternalServerError] = new ClientErrorData
+    {
+        Link="https://dotnet.com/500"
+    };
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -94,6 +101,12 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "CarsAPIV1");
     });
 }
+//app.UseExceptionHandler("/ErrorHandling/ProcessError");
+
+//app.HandleError(app.Environment.IsDevelopment());
+
+app.UseMiddleware<CustomExceptionMiddleware>();  
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthorization();

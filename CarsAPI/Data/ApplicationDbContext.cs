@@ -39,7 +39,8 @@ namespace CarsAPI.Data
                     FuelEfficiency = 28.5,
                     BodyType = "Sedan",
                     Condition = "Used",
-                    ImageUrl = "https://placehold.co/600x401"
+                    ImageUrl = "https://placehold.co/600x401",
+                    ImageLocalPath = "https://placehold.co/600x401"
                 },
                 new Car
                 {
@@ -56,7 +57,8 @@ namespace CarsAPI.Data
                     FuelEfficiency = 30.2,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://placehold.co/600x402"
+                    ImageUrl = "https://placehold.co/600x402",
+                    ImageLocalPath = "https://placehold.co/600x401"
                 },
                 new Car
                 {
@@ -73,7 +75,8 @@ namespace CarsAPI.Data
                     FuelEfficiency = 25.0,
                     BodyType = "Coupe",
                     Condition = "New",
-                    ImageUrl = "https://placehold.co/600x403"
+                    ImageUrl = "https://placehold.co/600x403",
+                    ImageLocalPath = "https://placehold.co/600x401"
                 },
                 new Car
                 {
@@ -90,7 +93,8 @@ namespace CarsAPI.Data
                     FuelEfficiency = 18.6,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://placehold.co/600x404"
+                    ImageUrl = "https://placehold.co/600x404",
+                    ImageLocalPath = "https://placehold.co/600x401"
                 },
                 new Car
                 {
@@ -107,7 +111,8 @@ namespace CarsAPI.Data
                     FuelEfficiency = 24.5,
                     BodyType = "SUV",
                     Condition = "Used",
-                    ImageUrl = "https://placehold.co/600x405"
+                    ImageUrl = "https://placehold.co/600x405",
+                    ImageLocalPath = "https://placehold.co/600x401"
                 }
             );
         }

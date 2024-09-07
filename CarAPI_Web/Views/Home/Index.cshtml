@@ -3,26 +3,25 @@
 
 <img class="d-block w-100" src="images/home/slide1.jpg" alt="">
 
-<hr />
 <div class="row" style="--bs-gutter-x:0">
     @foreach(var car in Model){
         <div class="p-4 col-md-12 col-lg-6">
-            <div class="row" style="border-radius:20px; border: 1px solid #ffffff">
-                <div class="col-4">
+            <div class="row" style="border-radius:20px; border: 2px solid #000">
+                <div class="col-5">
                     <img class="d-block w-100 pt-1" style="border-radius:20px; max-height:10rem;min-height:10rem" asp-append-version="true" src="@car.ImageUrl" alt="First slide">
                 </div>
-                <div class="col-8">
-                    <p class="card-title text-warning" style="font-size:xx-large">@car.Make</p>
+                <div class="col-7">
+                    <p class="card-title fw-bold text-warning" style="font-size:xx-large">@car.Make</p>
                     <p class="card-text">
                         @((MarkupString)car.Model)
                     </p>
                 </div>
                 <div class="col-12">
                     <div class="row pb-3 pt-2">
-                        <div class="col-4">
-                            <a href="" class="btn btn-success form-control btn-block">Buy</a>
+                        <div class="col-5">
+                            <a href="" class="btn btn-dark form-control btn-block">Buy</a>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <span class="">Engine Type : @car.EngineType  </span><br />
                             <span class=" pt-1">Color : @car.Color</span><br />
                         </div>

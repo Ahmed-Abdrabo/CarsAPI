@@ -3,7 +3,7 @@
 <form asp-action="DeleteCarDetails">
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Delete Car Details</h1>
+        <h1 class="text-dark fw-bold">Delete Car Details</h1>
         <hr />
         <input hidden asp-for="CarDetails.CarDetailsId" />
         <div class="row">
@@ -36,7 +36,7 @@
                 <textarea asp-for="CarDetails.AdditionalFeature" disabled class="form-control" rows="5"></textarea>
             </div>
             <div class="col-5 offset-2">
-                <a asp-action="IndexCarDetails" asp-controller="CarDetails" class="btn-primary btn form-control ">Back to List</a>
+                <a asp-action="IndexCarDetails" asp-controller="CarDetails" class="btn-outline-dark btn form-control ">Back to List</a>
             </div>
             <div class="col-5">
                 <input type="submit" value="Delete" class="btn btn-danger form-control" />
